@@ -13,10 +13,12 @@ public class JwtService {
 
     private final String SECRET = "contact-service-test-super-secret-jwt-key-that-is-only-used-for-testing";
 
+    // Retrieve the secret key
     private SecretKey getKey() {
         return Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
     }
 
+    // Generate a new token
     public String generateToken(String username) {
         return Jwts.builder()
                 .subject(username)
@@ -26,6 +28,7 @@ public class JwtService {
                 .compact();
     }
 
+    // Retrieves the username
     public String getUsername(String token) {
         return Jwts.parser()
                 .verifyWith(getKey())
@@ -35,6 +38,7 @@ public class JwtService {
                 .getSubject();
     }
 
+    // Verify the token is valid
     public boolean isValid(String token) {
         try {
             Jwts.parser()

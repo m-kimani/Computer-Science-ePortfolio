@@ -19,6 +19,7 @@ public class AuthController {
         this.jwtService = jwtService;
     }
 
+    // POST - Login
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> login) {
         String username = login.get("username");
@@ -28,9 +29,7 @@ public class AuthController {
             String token = jwtService.generateToken(username);
             return ResponseEntity.ok(Map.of("token", token));
         }
-        return ResponseEntity
-                .status(401)
-                .body("Invalid username or password was entered.");
+        return ResponseEntity.status(401).body("Invalid username or password was entered.");
     }
 
 }

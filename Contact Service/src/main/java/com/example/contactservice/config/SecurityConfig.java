@@ -16,6 +16,7 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
+    // Security chain to protect endpoints
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)

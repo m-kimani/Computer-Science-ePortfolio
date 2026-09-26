@@ -19,18 +19,17 @@ public class JwtFilter extends OncePerRequestFilter {
         this.jwtService = jwtService;
     }
 
+    // Internal filter that validates the incoming token
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
         throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-
             String token = authHeader.substring(7);
 
             if (jwtService.isValid(token)) {
                 String username = jwtService.getUsername(token);
-
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, null, List.of());
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
