@@ -2,11 +2,13 @@ package com.example.contactservice.controllers;
 
 import com.example.contactservice.models.Contact;
 import com.example.contactservice.services.ContactService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/contacts")
@@ -26,21 +28,21 @@ public class ContactController {
 
     // GET - By ID
     @GetMapping("/{id}")
-    public ResponseEntity<Contact> getContactById(@PathVariable Long id) {
+    public ResponseEntity<Optional<Contact>> getContactById(@PathVariable Long id) {
         return ResponseEntity.ok(contactService.getContactById(id));
     }
 
 
     // POST - Create contact
     @PostMapping
-    public ResponseEntity<Contact> createContact( @RequestBody Contact contact) {
+    public ResponseEntity<Contact> createContact( @Valid @RequestBody Contact contact) {
         Contact newContact = contactService.addContact(contact);
         return ResponseEntity.status(HttpStatus.CREATED).body(newContact);
     }
 
     // PUT - Update contact by ID
     @PutMapping("/{id}")
-    public ResponseEntity<Contact> updateContact( @PathVariable Long id, @RequestBody Contact updatedContact) {
+    public ResponseEntity<Contact> updateContact( @PathVariable Long id, @Valid @RequestBody Contact updatedContact) {
         return ResponseEntity.ok(contactService.updateContact(id, updatedContact));
     }
 

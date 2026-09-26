@@ -3,19 +3,25 @@ package com.example.contactservice.services;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import com.example.contactservice.models.Contact;
+import com.example.contactservice.repositories.ContactRepo;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ContactService {
 
     private final List<Contact> contactList = new ArrayList<>();
+    private final ContactRepo contactRepo;
 
+    public ContactService(ContactRepo contactRepo) {
+        this.contactRepo = contactRepo;
+    }
+
+    // Add a new contact
     public Contact addContact(Contact contact) {
-
-        // Update to connect to PostgreSQL database to add a new contact
-        return contact;
+        return contactRepo.save(contact);
     }
 
     public void deleteContact(Long id) {
@@ -33,9 +39,8 @@ public class ContactService {
         return new ArrayList<>();
     }
 
-    public Contact getContactById(Long id) {
-        // Update to connect to PostgreSQL database to retrieve a list off all contacts
-        return new Contact();
+    public Optional<Contact> getContactById(Long id) {
+        return contactRepo.findById(id);
     }
 }
 

@@ -1,20 +1,39 @@
 package com.example.contactservice.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.springframework.stereotype.Component;
 
 @Entity
+@Table(name="contacts")
 public class Contact {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank(message="First name required.")
+    @Size(max=50, message = "First name cannot exceed 50 characters.")
+    @Column(nullable = false, length = 50)
     private String firstName;
+
+    @NotBlank(message="Last name required.")
+    @Size(max=50, message = "Last name cannot exceed 50 characters.")
+    @Column(nullable = false, length = 50)
     private String lastName;
+
+    @Pattern(regexp = "^\\+?[1-9]\\d{1,14}$",
+            message = "Phone number must be valid ")
+    @Column(length = 20)
     private String phone;
+
+    @NotBlank(message="Address is required.")
+    @Size(min = 10, max=255, message = "Address must be between 10 and 255 characters.")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-zA-Z]).{5,},\\s*.*\\b\\d{5}(-\\d{4})?\\b.*$",
+            message = "Address must include a street number, street text, and a 5 digit ZIP code.")
+    @Column(nullable = false, length = 255)
     private String address;
 
     public Contact() {
@@ -40,12 +59,7 @@ public class Contact {
     }
 
     public void setFirstName(String firstName) {
-        // Add this validation to the controller instead
-        if(firstName != null && firstName.length() <= 10) {
-            this.firstName = firstName;
-        } else {
-            throw new IllegalArgumentException("Error: Invalid first name entered." + firstName);
-        }
+        this.firstName = firstName;
     }
 
     public String getLastName() {
@@ -53,12 +67,7 @@ public class Contact {
     }
 
     public void setLastName(String lastName) {
-        // Add this validation to the controller instead
-        if(lastName != null && lastName.length() <= 10) {
             this.lastName = lastName;
-        } else {
-            throw new IllegalArgumentException("Error: Invalid last name entered." + lastName);
-        }
     }
 
     public String getPhone() {
@@ -66,12 +75,7 @@ public class Contact {
     }
 
     public void setPhone(String phone) {
-        // Add this validation to the controller instead
-        if(phone != null && phone.length() == 10) {
-            this.phone = phone;
-        } else {
-            throw new IllegalArgumentException("Error: Invalid phone number entered." + phone);
-        }
+        this.phone = phone;
     }
 
     public String getAddress() {
@@ -79,12 +83,7 @@ public class Contact {
     }
 
     public void setAddress(String address) {
-        // Add this validation to the controller instead
-        if(address != null && address.length() <= 30) {
             this.address = address;
-        } else {
-            throw new IllegalArgumentException("Error: Invalid address entered." + address);
-        }
     }
 
 }
