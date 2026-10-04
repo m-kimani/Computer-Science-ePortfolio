@@ -32,22 +32,21 @@ public class ContactController {
         return ResponseEntity.ok(contactService.getContactById(id));
     }
 
-
     // POST - Create contact
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Contact> createContact( @Valid @RequestBody Contact contact) {
         Contact newContact = contactService.addContact(contact);
         return ResponseEntity.status(HttpStatus.CREATED).body(newContact);
     }
 
     // PUT - Update contact by ID
-    @PutMapping("/{id}")
-    public ResponseEntity<Contact> updateContact( @PathVariable Long id, @Valid @RequestBody Contact updatedContact) {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Optional<Contact>> updateContact( @PathVariable Long id, @Valid @RequestBody Contact updatedContact) {
         return ResponseEntity.ok(contactService.updateContact(id, updatedContact));
     }
 
     // DELETE - Delete contact by ID
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deleteContact( @PathVariable Long id) {
         contactService.deleteContact(id);
         return ResponseEntity.noContent().build();

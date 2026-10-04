@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class ContactService {
 
-    private final List<Contact> contactList = new ArrayList<>();
     private final ContactRepo contactRepo;
 
     public ContactService(ContactRepo contactRepo) {
@@ -24,21 +23,33 @@ public class ContactService {
         return contactRepo.save(contact);
     }
 
+    // Delete a contact by id
     public void deleteContact(Long id) {
-        // Update to connect to PostgreSQL database to delete a contact by id
+        contactRepo.deleteById(id);
     }
 
-    // Condensed all update methods to one overall update method
-    public Contact updateContact(Long id, Contact updatedContact) {
-        // Update to connect to PostgreSQL database to update retrieved contact
-        return updatedContact;
+    // Updates an existing contact
+    public Optional<Contact> updateContact(Long id, Contact updatedContact) {
+        Optional<Contact> oldContact = contactRepo.findById(id);
+        oldContact.ifPresent(contact -> {
+            contact.setFirstName(updatedContact.getFirstName());
+            contact.setLastName(updatedContact.getLastName());
+            contact.setPhone(updatedContact.getPhone());
+            contact.setAddress(updatedContact.getAddress());
+            contactRepo.save(contact);
+        });
+
+        return oldContact;
+
+
     }
 
+    // Retrieve a list off all contacts
     public List<Contact> getAllContacts() {
-        // Update to connect to PostgreSQL database to retrieve a list off all contacts
-        return new ArrayList<>();
+        return contactRepo.findAll();
     }
 
+    // Retrieve a contact by id
     public Optional<Contact> getContactById(Long id) {
         return contactRepo.findById(id);
     }
